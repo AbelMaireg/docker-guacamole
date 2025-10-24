@@ -1,0 +1,38 @@
+services:
+  db:
+    build:
+      dockerfile: "db.Dockerfile"
+    networks:
+      - net
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "${DB_NAME:-guacamole_db}"
+      POSTGRES_USER: "${DB_USER:-admin}"
+      POSTGRES_PASSWORD: "${DB_PASS:-password}"
+  guacd:
+    image: guacamole/guacd:1.6.0
+    networks:
+      - net
+  guacamole:
+    image: guacamole/guacamole:1.6.0
+    depends_on:
+      - guacd
+      - db
+    networks:
+      - net
+    ports:
+      - "8080:8080"
+    environment:
+      GUACD_HOSTNAME: "${GUACD_HOSTNAME:-guacd}"
+      POSTGRESQL_HOSTNAME: "${DB_HOST:-db}"
+      POSTGRESQL_DATABASE: "${DB_NAME:-guacamole_db}"
+      POSTGRESQL_USER: "${DB_USER:-admin}"
+      POSTGRESQL_PASSWORD: "${DB_PASS:-password}"
+networks:
+  net:
+    driver: bridge
+volumes:
+  pg_data:
