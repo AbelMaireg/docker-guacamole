@@ -12,7 +12,7 @@ Once set up, Guacamole will be available at:
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/guacamole-docker.git
+git clone https://github.com/AbelMaireg/guacamole-docker.git
 cd guacamole-docker
 ```
 
